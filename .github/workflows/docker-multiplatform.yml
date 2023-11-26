@@ -1,3 +1,5 @@
+# Dockerfile build and push workflow for multi-platform images
+
 name: ci
 
 on:
@@ -24,6 +26,11 @@ jobs:
           - linux/arm/v7
           - linux/arm64
     steps:
+      - name: Load .env file
+        run: |
+        set -a
+        source .env
+        set +a
       - name: Checkout
         uses: actions/checkout@v4
       - name: Docker meta
@@ -48,6 +55,9 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
+          # Adding caching
+          cache-from: type=registry,ref=ghcr.io/${{ env.IMAGE_NAME }}:cache
+          cache-to: type=inline
           outputs: type=image,name=ghcr.io/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }},push-by-digest=true,name-canonical=true,push=true
           build-args: |
             ROOT_CONTAINER=${{ env.ROOT_CONTAINER }}
@@ -66,6 +76,9 @@ jobs:
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
+      - name: Notify build failure
+        if: failure()
+        run: echo "Build failed. Please check the logs for details."
 
   merge:
     runs-on: ubuntu-latest
