@@ -11,9 +11,9 @@ env:
  ROOT_CONTAINER: "ubuntu:22.04"
  GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
  IMAGE_NAME: "broadsea-foundation" # Hardcoded image name
- OHDSI_USER: ${{ secrets.OHDSI_USER }}
- OHDSI_UID: ${{ secrets.OHDSI_UID }}
- OHDSI_GID: ${{ secrets.OHDSI_GID }}
+ OHDSI_USER: "Odysseus"
+ OHDSI_UID: "1000"
+ OHDSI_GID: "100"
 
 jobs:
  build:
