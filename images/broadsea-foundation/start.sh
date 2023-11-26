@@ -38,7 +38,7 @@ fi
 source /usr/local/bin/run-hooks.sh /usr/local/bin/start-notebook.d
 
 # If the container started as the root user, then we have permission to refit
-# the jovyan user, and ensure file permissions, grant sudo rights, and such
+# the Odysseus user, and ensure file permissions, grant sudo rights, and such
 # things before we run the command passed to start.sh as the desired user
 # (NB_USER).
 #
@@ -188,19 +188,19 @@ else
     if ! whoami &> /dev/null; then
         _log "There is no entry in /etc/passwd for our UID=$(id -u). Attempting to fix..."
         if [[ -w /etc/passwd ]]; then
-            _log "Renaming old jovyan user to nayvoj ($(id -u jovyan):$(id -g jovyan))"
+            _log "Renaming old Odysseus user to nayvoj ($(id -u Odysseus):$(id -g Odysseus))"
 
             # We cannot use "sed --in-place" since sed tries to create a temp file in
             # /etc/ and we may not have write access. Apply sed on our own temp file:
-            sed --expression="s/^jovyan:/nayvoj:/" /etc/passwd > /tmp/passwd
-            echo "${NB_USER}:x:$(id -u):$(id -g):,,,:/home/jovyan:/bin/bash" >> /tmp/passwd
+            sed --expression="s/^Odysseus:/nayvoj:/" /etc/passwd > /tmp/passwd
+            echo "${NB_USER}:x:$(id -u):$(id -g):,,,:/home/Odysseus:/bin/bash" >> /tmp/passwd
             cat /tmp/passwd > /etc/passwd
             rm /tmp/passwd
 
             _log "Added new ${NB_USER} user ($(id -u):$(id -g)). Fixed UID!"
 
-            if [[ "${NB_USER}" != "jovyan" ]]; then
-                _log "WARNING: user is ${NB_USER} but home is /home/jovyan. You must run as root to rename the home directory!"
+            if [[ "${NB_USER}" != "Odysseus" ]]; then
+                _log "WARNING: user is ${NB_USER} but home is /home/Odysseus. You must run as root to rename the home directory!"
             fi
         else
             _log "WARNING: unable to fix missing /etc/passwd entry because we don't have write permission. Try setting gid=0 with \"--user=$(id -u):0\"."
@@ -211,19 +211,19 @@ else
     # A misconfiguration occurs when the user modifies the default values of
     # NB_USER, NB_UID, or NB_GID, but we cannot update those values because we
     # are not root.
-    if [[ "${NB_USER}" != "jovyan" && "${NB_USER}" != "$(id -un)" ]]; then
+    if [[ "${NB_USER}" != "Odysseus" && "${NB_USER}" != "$(id -un)" ]]; then
         _log "WARNING: container must be started as root to change the desired user's name with NB_USER=\"${NB_USER}\"!"
     fi
-    if [[ "${NB_UID}" != "${JOVYAN_UID}" && "${NB_UID}" != "$(id -u)" ]]; then
+    if [[ "${NB_UID}" != "${Odysseus_UID}" && "${NB_UID}" != "$(id -u)" ]]; then
         _log "WARNING: container must be started as root to change the desired user's id with NB_UID=\"${NB_UID}\"!"
     fi
-    if [[ "${NB_GID}" != "${JOVYAN_GID}" && "${NB_GID}" != "$(id -g)" ]]; then
+    if [[ "${NB_GID}" != "${Odysseus_GID}" && "${NB_GID}" != "$(id -g)" ]]; then
         _log "WARNING: container must be started as root to change the desired user's group id with NB_GID=\"${NB_GID}\"!"
     fi
 
     # Warn if the user isn't able to write files to ${HOME}
-    if [[ ! -w /home/jovyan ]]; then
-        _log "WARNING: no write access to /home/jovyan. Try starting the container with group 'users' (100), e.g. using \"--group-add=users\"."
+    if [[ ! -w /home/Odysseus ]]; then
+        _log "WARNING: no write access to /home/Odysseus. Try starting the container with group 'users' (100), e.g. using \"--group-add=users\"."
     fi
 
     # NOTE: This hook is run as the user we started the container as!
