@@ -53,15 +53,15 @@ if [ "$(id -u)" == 0 ]; then
     # - CHOWN_EXTRA: a comma-separated list of paths to chown
     # - CHOWN_HOME_OPTS / CHOWN_EXTRA_OPTS: arguments to the chown commands
 
-    # Refit the jovyan user to the desired user (NB_USER)
-    if id jovyan &> /dev/null; then
-        if ! usermod --home "/home/${NB_USER}" --login "${NB_USER}" jovyan 2>&1 | grep "no changes" > /dev/null; then
-            _log "Updated the jovyan user:"
-            _log "- username: jovyan       -> ${NB_USER}"
-            _log "- home dir: /home/jovyan -> /home/${NB_USER}"
+    # Refit the Odysseus user to the desired user (NB_USER)
+    if id Odysseus &> /dev/null; then
+        if ! usermod --home "/home/${NB_USER}" --login "${NB_USER}" Odysseus 2>&1 | grep "no changes" > /dev/null; then
+            _log "Updated the Odysseus user:"
+            _log "- username: Odysseus       -> ${NB_USER}"
+            _log "- home dir: /home/Odysseus -> /home/${NB_USER}"
         fi
     elif ! id -u "${NB_USER}" &> /dev/null; then
-        _log "ERROR: Neither the jovyan user nor '${NB_USER}' exists. This could be the result of stopping and starting, the container with a different NB_USER environment variable."
+        _log "ERROR: Neither the Odysseus user nor '${NB_USER}' exists. This could be the result of stopping and starting, the container with a different NB_USER environment variable."
         exit 1
     fi
     # Ensure the desired user (NB_USER) gets its desired user id (NB_UID) and is
@@ -77,28 +77,28 @@ if [ "$(id -u)" == 0 ]; then
         useradd --no-log-init --home "/home/${NB_USER}" --shell /bin/bash --uid "${NB_UID}" --gid "${NB_GID}" --groups 100 "${NB_USER}"
     fi
 
-    # Move or symlink the jovyan home directory to the desired user's home
+    # Move or symlink the Odysseus home directory to the desired user's home
     # directory if it doesn't already exist, and update the current working
     # directory to the new location if needed.
-    if [[ "${NB_USER}" != "jovyan" ]]; then
+    if [[ "${NB_USER}" != "Odysseus" ]]; then
         if [[ ! -e "/home/${NB_USER}" ]]; then
-            _log "Attempting to copy /home/jovyan to /home/${NB_USER}..."
+            _log "Attempting to copy /home/Odysseus to /home/${NB_USER}..."
             mkdir "/home/${NB_USER}"
-            if cp -a /home/jovyan/. "/home/${NB_USER}/"; then
+            if cp -a /home/Odysseus/. "/home/${NB_USER}/"; then
                 _log "Success!"
             else
-                _log "Failed to copy data from /home/jovyan to /home/${NB_USER}!"
-                _log "Attempting to symlink /home/jovyan to /home/${NB_USER}..."
-                if ln -s /home/jovyan "/home/${NB_USER}"; then
+                _log "Failed to copy data from /home/Odysseus to /home/${NB_USER}!"
+                _log "Attempting to symlink /home/Odysseus to /home/${NB_USER}..."
+                if ln -s /home/Odysseus "/home/${NB_USER}"; then
                     _log "Success creating symlink!"
                 else
-                    _log "ERROR: Failed copy data from /home/jovyan to /home/${NB_USER} or to create symlink!"
+                    _log "ERROR: Failed copy data from /home/Odysseus to /home/${NB_USER} or to create symlink!"
                     exit 1
                 fi
             fi
         fi
         # Ensure the current working directory is updated to the new path
-        if [[ "${PWD}/" == "/home/jovyan/"* ]]; then
+        if [[ "${PWD}/" == "/home/Odysseus/"* ]]; then
             new_wd="/home/${NB_USER}/${PWD:13}"
             _log "Changing working directory to ${new_wd}"
             cd "${new_wd}"
@@ -176,8 +176,8 @@ else
         _log "WARNING: container must be started as root to grant sudo permissions!"
     fi
 
-    JOVYAN_UID="$(id -u jovyan 2>/dev/null)"  # The default UID for the jovyan user
-    JOVYAN_GID="$(id -g jovyan 2>/dev/null)"  # The default GID for the jovyan user
+    Odysseus_UID="$(id -u Odysseus 2>/dev/null)"  # The default UID for the Odysseus user
+    Odysseus_GID="$(id -g Odysseus 2>/dev/null)"  # The default GID for the Odysseus user
 
     # Attempt to ensure the user uid we currently run as has a named entry in
     # the /etc/passwd file, as it avoids software crashing on hard assumptions
