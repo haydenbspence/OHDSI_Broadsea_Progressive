@@ -8,7 +8,7 @@ ARG OHDSI_USER="Odysseus"
 ARG OHDSI_UID="1000"
 ARG OHDSI_GID="100"
 
-# Set the shell to use and switch to root user
+# Set the shell to use and switch to the root user
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 USER root
 

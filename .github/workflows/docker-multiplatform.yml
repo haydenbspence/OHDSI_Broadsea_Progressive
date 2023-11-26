@@ -53,9 +53,9 @@ jobs:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           # Adding caching
-          cache-from: type=registry,ref=ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')/images/broadsea-foundation:cache
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/images/broadsea-foundation:cache
           cache-to: type=inline
-          outputs: type=image,name=ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')/images/broadsea-foundation:${{ steps.meta.outputs.version }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=ghcr.io/${{ github.repository_owner | lower }}/${{ github.repository | lower }}/images/broadsea-foundation:${{ steps.meta.outputs.version }},push-by-digest=true,name-canonical=true,push=true
           build-args: |
             ROOT_CONTAINER=${{ env.ROOT_CONTAINER }}
             OHDSI_USER=${{ env.OHDSI_USER }}
@@ -104,7 +104,7 @@ jobs:
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf 'ghcr.io/$(echo ${{ github.repository_owner }} | tr ''[:upper:]'' ''[:lower:]'')/$(echo ${{ github.repository }} | tr ''[:upper:]'' ''[:lower:]'')/images/broadsea-foundation:${{ steps.meta.outputs.version }}@sha256:%s ' *)
+            $(printf 'ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/images/broadsea-foundation:${{ steps.meta.outputs.version }}@sha256:%s ' *)
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ghcr.io/$(echo ${{ github.repository_owner }} | tr ''[:upper:]'' ''[:lower:]'')/$(echo ${{ github.repository }} | tr ''[:upper:]'' ''[:lower:]'')/images/broadsea-foundation:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/images/broadsea-foundation:${{ steps.meta.outputs.version }}
