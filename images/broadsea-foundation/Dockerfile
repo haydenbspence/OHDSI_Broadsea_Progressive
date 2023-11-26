@@ -1,7 +1,3 @@
-# Copyright (c) 2023 Spence
-# This work is licensed under the terms of the GNU Affero General Public License, version 3.
-# See <https://www.gnu.org/licenses/agpl-3.0.en.html> for details.
-
 # Use Ubuntu 22.04 (jammy) as the base image
 ARG ROOT_CONTAINER=ubuntu:22.04
 FROM $ROOT_CONTAINER

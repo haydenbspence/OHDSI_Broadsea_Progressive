@@ -1,14 +1,13 @@
 #!/bin/bash
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
+# start.sh
 
 set -e
 
 # The _log function is used for everything this script wants to log.
 # It will always log errors and warnings but can be silenced for other messages
-# by setting the JUPYTER_DOCKER_STACKS_QUIET environment variable.
+# by setting the BROADSEA_QUIET environment variable.
 _log () {
-    if [[ "$*" == "ERROR:"* ]] || [[ "$*" == "WARNING:"* ]] || [[ "${JUPYTER_DOCKER_STACKS_QUIET}" == "" ]]; then
+    if [[ "$*" == "ERROR:"* ]] || [[ "$*" == "WARNING:"* ]] || [[ "${BROADSEA_QUIET}" == "" ]]; then
         echo "$@"
     fi
 }

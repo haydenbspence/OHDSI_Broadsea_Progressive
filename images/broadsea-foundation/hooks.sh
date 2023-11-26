@@ -1,7 +1,5 @@
 #!/bin/bash
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
-
+# hooks.sh
 # The run-hooks.sh script looks for *.sh scripts to source
 # and executable files to run within a passed directory
 
