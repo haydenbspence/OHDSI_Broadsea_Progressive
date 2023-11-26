@@ -28,9 +28,9 @@ jobs:
     steps:
       - name: Load .env file
         run: |
-        set -a
-        source .env
-        set +a
+          set -a
+          source .env
+          set +a
       - name: Checkout
         uses: actions/checkout@v4
       - name: Docker meta
