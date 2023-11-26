@@ -98,9 +98,9 @@ CMD ["start.sh"]
 COPY hooks.sh start.sh /usr/local/bin/
 
 # Switch back to the OHDSI user and create some directories
-USER ${OHDSI_UID}
-RUN mkdir /usr/local/bin/start-notebook.d && \
-   mkdir /usr/local/bin/before-notebook.d
+#USER ${OHDSI_UID}
+#RUN mkdir /usr/local/bin/start-notebook.d && \
+#   mkdir /usr/local/bin/before-notebook.d
 
 # Set the working directory
-WORKDIR "${HOME}"
+# WORKDIR "${HOME}"
